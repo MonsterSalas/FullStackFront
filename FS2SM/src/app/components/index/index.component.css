@@ -1,0 +1,99 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    background-color: white;
+    color: #333;
+}
+
+header {
+    background-color: #6a0dad;
+    color: white;
+}
+
+.navbar-brand, .nav-link {
+    color: white;
+}
+
+.nav-link.active {
+    font-weight: bold;
+}
+
+.navbar-nav .dropdown-menu {
+    background-color: #6a0dad;
+}
+
+.dropdown-item {
+    color: white;
+}
+
+.dropdown-item:hover {
+    background-color: #5a00c0;
+}
+
+main {
+    flex: 1;
+    padding: 20px 0;
+}
+
+
+.product-card {
+    background-color: #f8f9fa;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.product-card img {
+    max-width: 100%;
+    border-radius: 10px;
+}
+
+.product-card .btn {
+    background-color: #6a0dad;
+    color: white;
+    border: none;
+}
+
+.product-card .btn:hover {
+    background-color: #5a00c0;
+}
+
+footer {
+    position: relative; /* Changed from fixed to relative */
+    bottom: 0;
+    width: 100%;
+    background-color: #6a0dad;
+    color: white;
+    padding: 20px 0;
+    text-align: center;
+}
+
+.hero-image {
+    background-image: url('../../../assets/img/fondo1.jpg');
+    background-size: cover;
+    background-position: center;
+    height: 400px;
+    position: relative;
+  }
+  
+  .hero-text {
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+  }
+  
+  .hero-text h1 {
+    font-size: 3rem;
+    font-weight: bold;
+  }
+  
+  .hero-text p {
+    font-size: 1.5rem;
+  }

@@ -1,0 +1,25 @@
+<div class="container mt-3">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+        <h2>Editar Perfil</h2>
+        <form [formGroup]="perfilForm" (ngSubmit)="guardarCambios()">
+            <div class="mb-3">
+            <label for="nombreCompleto" class="form-label">Nombre Completo</label>
+            <input type="text" class="form-control" id="nombreCompleto" formControlName="nombreCompleto">
+            <div *ngIf="perfilForm.get('nombreCompleto')?.invalid && perfilForm.get('nombreCompleto')?.touched" class="text-danger">
+                El nombre completo es requerido.
+            </div>
+            </div>
+            <div class="mb-3">
+            <label for="correo" class="form-label">Correo Electrónico</label>
+            <input type="email" class="form-control" id="correo" formControlName="correo">
+            <div *ngIf="perfilForm.get('correo')?.invalid && perfilForm.get('correo')?.touched" class="text-danger">
+                Proporcione un correo electrónico válido.
+            </div>
+            </div>
+            <!-- Agrega más campos según sea necesario -->
+            <button type="submit" class="btn btn-primary" [disabled]="perfilForm.invalid">Guardar Cambios</button>
+        </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,15 @@
+.loginForm {
+    margin-bottom: 20px;
+    border-radius: 10px;
+    padding: 1.5rem 1rem;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.15); /* Agrega una sombra alrededor del formulario */
+}
+
+.form-group{
+    margin-bottom: 1rem;
+}
+
+#forgotPass{
+    font-size: small;
+    text-align: center;
+}

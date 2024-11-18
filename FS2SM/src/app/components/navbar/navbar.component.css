@@ -1,0 +1,20 @@
+.navbar {
+    background-color: #6a0dad;
+    color: white;
+  }
+  .navbar-brand, .nav-link {
+    color: white;
+  }
+  .nav-link.active {
+    font-weight: bold;
+  }
+  .navbar-nav .dropdown-menu {
+    background-color: #6a0dad;
+  }
+  .dropdown-item {
+    color: white;
+  }
+  .dropdown-item:hover {
+    background-color: #5a00c0;
+  }
+  

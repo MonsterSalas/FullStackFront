@@ -1,0 +1,55 @@
+<!-- Modal del Carrito -->
+<div class="modal fade" id="carritoModal" tabindex="-1" aria-labelledby="carritoModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="carritoModalLabel">Carrito</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body carrito">
+                <div *ngFor="let item of carrito | keyvalue">
+                    <div>
+                      {{ item.value.producto.nombre }} ({{ item.value.cantidad }})
+                      <button (click)="incrementarProducto(item.key)">+</button>
+                      <button (click)="disminuirProducto(item.key)">-</button>
+                    </div>
+                  </div>
+                  <div>
+                    Total: ${{ obtenerTotal() }}
+                  </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary">Comprar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Slider -->
+<div id="carouselExampleIndicators" class="hero-image">
+    <div class="hero-text col-lg-4 col-md-6 col-sm-12">
+        <h2>SAHARD-COMPONENTS</h2>
+        <p>Innovación y tecnología de punta</p>
+    </div>
+</div>
+
+<div class="container productos">
+    <main>
+        <div class="row">
+            <div class="col-lg-4 col-md-6 col-sm-12" *ngFor="let producto of productos">
+                <div class="product-card">
+                    <img [src]="producto.imagen" [alt]="producto.nombre" class="img-fluid">
+                    <h5 class="mt-3">{{ producto.nombre }}</h5>
+                    <p>{{ producto.descripcion }}</p>
+                    <p>${{ producto.precio }}</p>
+                    <button class="btn comprar" (click)="comprar(producto)">Comprar</button>
+                </div>  
+            </div>
+        </div>
+    </main>
+</div>
+
+<footer>
+    &copy; 2024 SAHARD. Todos los derechos reservados.
+</footer>
