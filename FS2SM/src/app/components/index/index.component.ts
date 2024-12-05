@@ -1,18 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ProductoService } from '../../services/producto.service';
+import { Producto, CarritoItem } from '../../interface/producto.interface';
 import Swal from 'sweetalert2';
-
-interface Producto {
-  nombre: string;
-  descripcion: string;
-  imagen: string;
-  precio: number;
-}
-
-interface CarritoItem {
-  producto: Producto;
-  cantidad: number;
-}
 
 @Component({
   selector: 'app-index',
@@ -24,42 +14,42 @@ interface CarritoItem {
 export class IndexComponent implements OnInit {
   estaLogueado: boolean = false;
   carrito: { [key: string]: CarritoItem } = {};
-  productos: Producto[] = [
-    {
-      nombre: 'ASUS Prime H510M-E',
-      descripcion: 'Placa Madre ASUS Prime H510M-E',
-      imagen: 'assets/img/motherboard.jpg',
-      precio: 100
-    },
-    {
-      nombre: 'Samsung Odyssey Neo G9',
-      descripcion: 'Tela Curva Super Ultrawide, 240Hz, FreeSync',
-      imagen: 'assets/img/monitor.jpeg',
-      precio: 200
-    },
-  ];
+  productos: Producto[] = [];
+
+  constructor(private productoService: ProductoService) {}
 
   ngOnInit(): void {
+    this.cargarProductos();
     this.actualizarCarrito();
   }
 
-  verCarrito(): void {
-    this.actualizarCarrito();
-    const carritoModal = document.getElementById('carritoModal');
-    if (carritoModal) {
-      // Abre el modal (necesitas un framework de UI para modal)
-    }
+  cargarProductos(): void {
+    this.productoService.getAllProductos().subscribe({
+      next: (productos) => {
+        this.productos = productos;
+      },
+      error: (error) => {
+        console.error('Error al cargar productos:', error);
+        Swal.fire('Error', 'No se pudieron cargar los productos', 'error');
+      }
+    });
   }
 
   comprar(producto: Producto): void {
     if (this.carrito[producto.nombre]) {
-      this.carrito[producto.nombre].cantidad++;
+      if (this.carrito[producto.nombre].cantidad < producto.stock) {
+        this.carrito[producto.nombre].cantidad++;
+        Swal.fire('Producto añadido', `${producto.nombre} ha sido añadido al carrito`, 'success');
+      } else {
+        Swal.fire('Stock insuficiente', `No hay más unidades disponibles de ${producto.nombre}`, 'warning');
+        return;
+      }
     } else {
       this.carrito[producto.nombre] = { producto: producto, cantidad: 1 };
+      Swal.fire('Producto añadido', `${producto.nombre} ha sido añadido al carrito`, 'success');
     }
     localStorage.setItem('carrito', JSON.stringify(this.carrito));
     this.actualizarCarrito();
-    Swal.fire('Producto añadido', `${producto.nombre} ha sido añadido al carrito`, 'success');
   }
 
   actualizarCarrito(): void {
@@ -73,9 +63,14 @@ export class IndexComponent implements OnInit {
 
   incrementarProducto(producto: string): void {
     if (this.carrito[producto]) {
-      this.carrito[producto].cantidad++;
-      localStorage.setItem('carrito', JSON.stringify(this.carrito));
-      this.actualizarCarrito();
+      const stockDisponible = this.productos.find(p => p.nombre === producto)?.stock || 0;
+      if (this.carrito[producto].cantidad < stockDisponible) {
+        this.carrito[producto].cantidad++;
+        localStorage.setItem('carrito', JSON.stringify(this.carrito));
+        this.actualizarCarrito();
+      } else {
+        Swal.fire('Stock insuficiente', `No hay más unidades disponibles de ${producto}`, 'warning');
+      }
     }
   }
 

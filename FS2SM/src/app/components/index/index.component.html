@@ -33,24 +33,26 @@
         <p>Innovación y tecnología de punta</p>
     </div>
 </div>
-
-<div class="container productos">
-    <main>
+<div class="container">
+    <div class="productos">
         <div class="row">
             <div class="col-lg-4 col-md-6 col-sm-12" *ngFor="let producto of productos">
                 <div class="product-card">
-                    <img [src]="producto.imagen" [alt]="producto.nombre" class="img-fluid">
-                    <h5 class="mt-3">{{ producto.nombre }}</h5>
-                    <p>{{ producto.descripcion }}</p>
-                    <p>${{ producto.precio }}</p>
-                    <button class="btn comprar" (click)="comprar(producto)">Comprar</button>
-                </div>  
+                    <h5 class="producto-titulo">{{ producto.nombre }}</h5>
+                    <p class="producto-descripcion">{{ producto.descripcion }}</p>
+                    <div class="producto-detalles">
+                        <p><strong>Categoría:</strong> {{ producto.categoria }}</p>
+                        <p><strong>Stock disponible:</strong> {{ producto.stock }}</p>
+                        <p class="precio">${{ producto.precio }}</p>
+                    </div>
+                    <button class="btn comprar" (click)="comprar(producto)" [disabled]="producto.stock === 0">
+                        {{ producto.stock > 0 ? 'Comprar' : 'Sin stock' }}
+                    </button>
+                </div>
             </div>
         </div>
-    </main>
+    </div>
 </div>
-
 <footer>
     &copy; 2024 SAHARD. Todos los derechos reservados.
 </footer>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
