@@ -1,123 +1,74 @@
 import { Component, OnInit } from '@angular/core';
-import { ReactiveFormsModule, Validators } from '@angular/forms';
-import { FormGroup, FormControl } from '@angular/forms';
-import { Cliente } from '../../interface/cliente.model'; // Asegúrate de ajustar la ruta de importación según sea necesario
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { UsuarioService } from '../../services/usuario.service';
+import { Usuario } from '../../interface/usuario.interface';
 import Swal from 'sweetalert2';
-import {Router} from '@angular/router';
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
-
-function validarContrasenia(): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const valor = control.value || ''; // Asegurarse de que valor sea una cadena vacía si es null o undefined
-    console.log("Valor de la contraseña:", valor); // Para depuración
-    const tieneNumero = /[0-9]/.test(valor);
-    console.log("Tiene número:", tieneNumero); // Para depuración
-    const tieneMayuscula = /[A-Z]/.test(valor);
-    console.log("Tiene mayúscula:", tieneMayuscula); // Para depuración
-    const tieneLongitudAdecuada = valor.length >= 8;
-    console.log("Tiene longitud adecuada:", tieneLongitudAdecuada); // Para depuración
-    if (!tieneNumero || !tieneMayuscula || !tieneLongitudAdecuada) {
-      console.log("Contraseña inválida"); // Para depuración
-      return { contraseniaInvalida: true };
-    }
-    console.log("Contraseña válida"); // Para depuración
-    return null;
-  };
-}
-
-
-function validarCorreo(): ValidatorFn {
-  return (control: AbstractControl): ValidationErrors | null => {
-    const valor = control.value || ''; // Asegurarse de que valor sea una cadena vacía si es null o undefined
-    const formatoCorreo = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    if (!formatoCorreo.test(valor)) {
-      return { correoInvalido: true };
-    }
-    return null;
-  };
-}
 
 @Component({
   selector: 'app-registrar',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './registrar.component.html',
-  styleUrls: ['./registrar.component.css'] // Corregido de 'styleUrl' a 'styleUrls'
+  styleUrls: ['./registrar.component.css']
 })
-
-
-
-
 export class RegistrarComponent implements OnInit {
-  registrarForm!: FormGroup;
-  public clientes: Cliente[] = [];
-  
+  registroForm: FormGroup;
 
-  constructor(public Router: Router) {
-  }
-
-  ngOnInit(): void {
-    
-    this.registrarForm = new FormGroup({
-      nombreCompleto: new FormControl('', Validators.required),
-      correo: new FormControl('', [Validators.required, validarCorreo()]),
-      contrasennia: new FormControl('', [Validators.required, validarContrasenia()])
+  constructor(
+    private fb: FormBuilder,
+    private usuarioService: UsuarioService,
+    private router: Router
+  ) {
+    this.registroForm = this.fb.group({
+      nombreCompleto: ['', [Validators.required]],
+      username: ['', [Validators.required]],
+      password: ['', [Validators.required]]
     });
-    this.loadClientes();
   }
 
-  loadClientes(): void {
-    const clientesGuardados = localStorage.getItem('clientes');
-    if (clientesGuardados) {
-      this.clientes = JSON.parse(clientesGuardados);
-    }
+  ngOnInit(): void {}
+
+  isFieldInvalid(field: string): boolean {
+    const control = this.registroForm.get(field);
+    return !!(control && control.invalid && (control.dirty || control.touched));
   }
 
-  saveClientes(): void {
-    localStorage.setItem('clientes', JSON.stringify(this.clientes));
-  }
+  onSubmit(): void {
+    if (this.registroForm.valid) {
+      const usuario: Usuario = {
+        ...this.registroForm.value,
+        rolId: 1 // ID para el rol de usuario normal
+      };
 
-  agregarCliente(cliente: Cliente): boolean {
-    const longitudInicial = this.clientes.length;
-    this.clientes.push(cliente);
-    this.saveClientes();
-    return this.clientes.length > longitudInicial;
-  }
-  existeCliente(correo: string): boolean {
-    return this.clientes.some(cliente => cliente.correo === correo);
-  }
-
-  registrarCliente(): void {
-    if (this.registrarForm.valid) {
-      const nuevoCliente: Cliente = this.registrarForm.value;
-      // Verificar si el cliente ya existe
-      if (this.existeCliente(nuevoCliente.correo)) {
-        Swal.fire('Error', 'El cliente con este correo electrónico ya existe.', 'error');
-        return;
-      }
-      const resultado = this.agregarCliente(nuevoCliente);
-      if (resultado) {
-        Swal.fire({
-          title: 'Registro Exitoso',
-          text: 'Te has registrado de manera exitosa',
-          icon: 'success',
-          showConfirmButton: false,
-          timer: 1000
-        }).then(() => {
-          this.Router.navigate(['/login']);
-        });
-      } else {
-        console.log("Error al agregar el cliente.");
-      }
-      this.registrarForm.reset();
-    }
-    else {
-      // Verificar qué campo tiene el error y mostrar el mensaje correspondiente
-      if (this.registrarForm.get('correo')?.errors?.['correoInvalido']) {
-        Swal.fire('Error', 'El correo electrónico no tiene un formato válido.', 'error');
-      } else if (this.registrarForm.get('contrasennia')?.errors?.['contraseniaInvalida']) {
-        Swal.fire('Error', 'La contraseña debe tener al menos 8 caracteres, incluir una mayúscula y un número.', 'error');
-      }
+      this.usuarioService.crearUsuario(usuario).subscribe({
+        next: (response) => {
+          Swal.fire({
+            title: 'Éxito',
+            text: 'Usuario registrado correctamente',
+            icon: 'success',
+            timer: 1500
+          }).then(() => {
+            this.router.navigate(['/login']);
+          });
+        },
+        error: (error) => {
+          console.error('Error al registrar:', error);
+          Swal.fire({
+            title: 'Error',
+            text: error.error?.mensaje || 'Ocurrió un error al intentar registrar el usuario',
+            icon: 'error'
+          });
+        }
+      });
+    } else {
+      this.registroForm.markAllAsTouched();
+      Swal.fire({
+        title: 'Error',
+        text: 'Por favor, complete todos los campos requeridos',
+        icon: 'error'
+      });
     }
   }
 }
