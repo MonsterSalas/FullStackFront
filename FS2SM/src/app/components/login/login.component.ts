@@ -38,17 +38,18 @@ export class LoginComponent implements OnInit {
       const username = this.loginForm.get('username')?.value;
       const password = this.loginForm.get('password')?.value;
 
-      // Caso especial para admin
-      if (username === 'admin' && password === 'admin') {
-        this.handleSuccessfulLogin({ rol: 'ADMIN' }, '/admin');
-        return;
-      }
-
       this.authService.login(username, password).subscribe({
         next: (response) => {
           console.log('Respuesta del servidor:', response);
           if (response && response.mensaje === "Login exitoso") {
-            this.handleSuccessfulLogin({ username }, '/index');
+            const redirectPath = response.rol === 'ADMIN' ? '/admin' : '/index';
+            this.handleSuccessfulLogin(
+              { 
+                username: response.username, 
+                rol: response.rol 
+              }, 
+              redirectPath
+            );
           } else {
             this.showErrorAlert('Credenciales inválidas');
           }

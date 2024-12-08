@@ -10,11 +10,15 @@
         <li class="nav-item">
           <a class="nav-link" aria-current="page" href="#">Inicio</a>
         </li>
-        <li class="nav-item" *ngIf="isLoggedIn;">
+        <!-- Enlace al panel de admin solo visible para administradores -->
+        <li class="nav-item" *ngIf="isLoggedIn && isAdmin">
+          <a class="nav-link" routerLink="/admin">Panel Admin</a>
+        </li>
+        <li class="nav-item" *ngIf="isLoggedIn && !isAdmin;">
           <a class="nav-link" routerLink="/perfil" id="cerrarSesion">Mi perfil</a>
         </li>
         <li class="nav-item" *ngIf="isLoggedIn; else loginLink">
-          <a class="nav-link"  (click)="logout()" id="cerrarSesion">Cerrar Sesión</a>
+          <a class="nav-link" (click)="logout()" id="cerrarSesion">Cerrar Sesión</a>
         </li>
         <ng-template #loginLink>
           <li class="nav-item">
@@ -22,7 +26,7 @@
           </li>
         </ng-template>
       </ul>
-
+      
       <i class="fa-solid fa-cart-shopping" id="verCarrito" data-bs-toggle="modal" data-bs-target="#carritoModal"
         id="carrito">Carrito</i>
     </div>

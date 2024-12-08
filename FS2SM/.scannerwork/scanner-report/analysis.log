@@ -1,0 +1,77 @@
+Plugins:
+Bundled analyzers:
+  - JaCoCo 1.3.0.1538 (jacoco)
+  - IaC Code Quality and Security 1.36.0.12431 (iac)
+  - Text Code Quality and Security 2.16.0.4008 (text)
+  - Clean as You Code 2.4.0.2018 (cayc)
+  - XML Code Quality and Security 2.10.0.4108 (xml)
+Global server settings:
+  - sonar.azureresourcemanager.file.suffixes=.bicep
+  - sonar.core.id=147B411E-AZNCHL8ok4BaZdIkR8by
+  - sonar.core.startTime=2024-12-08T19:01:21-0300
+  - sonar.cs.file.suffixes=.cs,.razor
+  - sonar.css.file.suffixes=.css,.less,.scss,.sass
+  - sonar.docker.file.patterns=Dockerfile,*.dockerfile
+  - sonar.flex.file.suffixes=as
+  - sonar.forceAuthentication=true
+  - sonar.go.file.suffixes=.go
+  - sonar.html.file.suffixes=.html,.xhtml,.cshtml,.vbhtml,.aspx,.ascx,.rhtml,.erb,.shtm,.shtml,.cmp,.twig
+  - sonar.ipynb.file.suffixes=ipynb
+  - sonar.java.file.suffixes=.java,.jav
+  - sonar.java.jvmframeworkconfig.file.patterns=**/src/main/resources/**/application*.properties,**/src/main/resources/**/application*.yaml,**/src/main/resources/**/application*.yml
+  - sonar.javascript.file.suffixes=.js,.jsx,.cjs,.mjs,.vue
+  - sonar.json.file.suffixes=.json
+  - sonar.jsp.file.suffixes=.jsp,.jspf,.jspx
+  - sonar.kotlin.file.suffixes=.kt,.kts
+  - sonar.php.file.suffixes=php,php3,php4,php5,phtml,inc
+  - sonar.python.file.suffixes=py
+  - sonar.qualityProfiles.allowDisableInheritedRules=true
+  - sonar.ruby.file.suffixes=.rb
+  - sonar.scala.file.suffixes=.scala
+  - sonar.terraform.file.suffixes=.tf
+  - sonar.typescript.file.suffixes=.ts,.tsx,.cts,.mts
+  - sonar.vbnet.file.suffixes=.vb
+  - sonar.xml.file.suffixes=.xml,.xsd,.xsl,.config
+  - sonar.yaml.file.suffixes=.yaml,.yml
+Project server settings:
+  - sonar.azureresourcemanager.file.suffixes=.bicep
+  - sonar.cs.file.suffixes=.cs,.razor
+  - sonar.css.file.suffixes=.css,.less,.scss,.sass
+  - sonar.docker.file.patterns=Dockerfile,*.dockerfile
+  - sonar.flex.file.suffixes=as
+  - sonar.go.file.suffixes=.go
+  - sonar.html.file.suffixes=.html,.xhtml,.cshtml,.vbhtml,.aspx,.ascx,.rhtml,.erb,.shtm,.shtml,.cmp,.twig
+  - sonar.ipynb.file.suffixes=ipynb
+  - sonar.java.file.suffixes=.java,.jav
+  - sonar.java.jvmframeworkconfig.file.patterns=**/src/main/resources/**/application*.properties,**/src/main/resources/**/application*.yaml,**/src/main/resources/**/application*.yml
+  - sonar.javascript.file.suffixes=.js,.jsx,.cjs,.mjs,.vue
+  - sonar.json.file.suffixes=.json
+  - sonar.jsp.file.suffixes=.jsp,.jspf,.jspx
+  - sonar.kotlin.file.suffixes=.kt,.kts
+  - sonar.php.file.suffixes=php,php3,php4,php5,phtml,inc
+  - sonar.python.file.suffixes=py
+  - sonar.ruby.file.suffixes=.rb
+  - sonar.scala.file.suffixes=.scala
+  - sonar.terraform.file.suffixes=.tf
+  - sonar.typescript.file.suffixes=.ts,.tsx,.cts,.mts
+  - sonar.vbnet.file.suffixes=.vb
+  - sonar.xml.file.suffixes=.xml,.xsd,.xsl,.config
+  - sonar.yaml.file.suffixes=.yaml,.yml
+Project scanner properties:
+  - sonar.coverage.exclusions=**/*.spec.ts,**/test.ts,**/main.ts
+  - sonar.exclusions=**/node_modules/**,**/*.spec.ts
+  - sonar.host.url=http://localhost:9000
+  - sonar.javascript.lcov.reportPaths=coverage/lcov.info
+  - sonar.projectBaseDir=C:\Users\ignac\Documents\GitHub\FullStackFront\FS2SM
+  - sonar.projectKey=FullStack
+  - sonar.projectVersion=1.0
+  - sonar.scanner.app=ScannerCli
+  - sonar.scanner.appVersion=3.1.0.1141
+  - sonar.scanner.home=C:\Users\ignac\AppData\Roaming\npm\node_modules\sonar-scanner\bin\..
+  - sonar.sourceEncoding=UTF-8
+  - sonar.sources=src/app
+  - sonar.test.inclusions=**/*.spec.ts
+  - sonar.tests=src/app
+  - sonar.token=******
+  - sonar.typescript.tsconfigPath=tsconfig.json
+  - sonar.working.directory=C:\Users\ignac\Documents\GitHub\FullStackFront\FS2SM\.scannerwork

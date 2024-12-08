@@ -3,11 +3,12 @@ import { CommonModule } from '@angular/common';
 import { ProductoService } from '../../services/producto.service';
 import { Producto, CarritoItem } from '../../interface/producto.interface';
 import Swal from 'sweetalert2';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-index',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './index.component.html',
   styleUrls: ['./index.component.css']
 })
@@ -15,6 +16,8 @@ export class IndexComponent implements OnInit {
   estaLogueado: boolean = false;
   carrito: { [key: string]: CarritoItem } = {};
   productos: Producto[] = [];
+  productosFiltrados: Producto[] = [];
+  terminoBusqueda: string = '';
 
   constructor(private productoService: ProductoService) {}
 
@@ -27,6 +30,7 @@ export class IndexComponent implements OnInit {
     this.productoService.getAllProductos().subscribe({
       next: (productos) => {
         this.productos = productos;
+        this.productosFiltrados = productos;
       },
       error: (error) => {
         console.error('Error al cargar productos:', error);
@@ -35,18 +39,45 @@ export class IndexComponent implements OnInit {
     });
   }
 
+  buscarProductos(event: any): void {
+    const termino = event.target.value.toLowerCase();
+    this.terminoBusqueda = termino;
+    
+    if (termino === '') {
+      this.productosFiltrados = this.productos;
+    } else {
+      this.productosFiltrados = this.productos.filter(producto => 
+        producto.nombre.toLowerCase().includes(termino) ||
+        producto.descripcion.toLowerCase().includes(termino) ||
+        producto.categoria.toLowerCase().includes(termino)
+      );
+    }
+  }
+
   comprar(producto: Producto): void {
     if (this.carrito[producto.nombre]) {
       if (this.carrito[producto.nombre].cantidad < producto.stock) {
         this.carrito[producto.nombre].cantidad++;
-        Swal.fire('Producto añadido', `${producto.nombre} ha sido añadido al carrito`, 'success');
+        Swal.fire({
+          title: 'Producto añadido',
+          text: `${producto.nombre} ha sido añadido al carrito`,
+          icon: 'success',
+          showConfirmButton: false,
+          timer: 1500
+        });
       } else {
         Swal.fire('Stock insuficiente', `No hay más unidades disponibles de ${producto.nombre}`, 'warning');
         return;
       }
     } else {
       this.carrito[producto.nombre] = { producto: producto, cantidad: 1 };
-      Swal.fire('Producto añadido', `${producto.nombre} ha sido añadido al carrito`, 'success');
+      Swal.fire({
+        title: 'Producto añadido',
+        text: `${producto.nombre} ha sido añadido al carrito`,
+        icon: 'success',
+        showConfirmButton: false,
+        timer: 1500
+      });
     }
     localStorage.setItem('carrito', JSON.stringify(this.carrito));
     this.actualizarCarrito();
