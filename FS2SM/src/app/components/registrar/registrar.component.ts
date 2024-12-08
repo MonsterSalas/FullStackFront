@@ -27,14 +27,11 @@ export class RegistrarComponent implements OnInit {
       password: ['', [Validators.required]]
     });
   }
-
   ngOnInit(): void {}
-
   isFieldInvalid(field: string): boolean {
     const control = this.registroForm.get(field);
     return !!(control && control.invalid && (control.dirty || control.touched));
   }
-
   onSubmit(): void {
     if (this.registroForm.valid) {
       const usuario: Usuario = {
