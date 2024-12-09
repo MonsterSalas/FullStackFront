@@ -1,51 +1,94 @@
 <div class="registro-container">
   <div class="registro-card">
     <h2>Registro de Usuario</h2>
-    
     <form [formGroup]="registroForm" (ngSubmit)="onSubmit()">
+      <!-- Nombre Completo -->
       <div class="form-group">
-        <label for="nombreCompleto">Nombre Completo:</label>
-        <input 
-          type="text" 
+        <label for="nombreCompleto">Nombre Completo</label>
+        <input
+          type="text"
           id="nombreCompleto"
           formControlName="nombreCompleto"
-          [class.is-invalid]="isFieldInvalid('nombreCompleto')"
           class="form-control"
+          [ngClass]="{'is-invalid': isFieldInvalid('nombreCompleto')}"
         >
         <div class="invalid-feedback" *ngIf="isFieldInvalid('nombreCompleto')">
-          El nombre completo es requerido
+          {{ getErrorMessage('nombreCompleto') }}
         </div>
       </div>
 
+      <!-- Username -->
       <div class="form-group">
-        <label for="username">Username:</label>
-        <input 
-          type="text" 
+        <label for="username">Nombre de Usuario</label>
+        <input
+          type="text"
           id="username"
           formControlName="username"
-          [class.is-invalid]="isFieldInvalid('username')"
           class="form-control"
+          [ngClass]="{'is-invalid': isFieldInvalid('username')}"
         >
         <div class="invalid-feedback" *ngIf="isFieldInvalid('username')">
-          El username es requerido
+          {{ getErrorMessage('username') }}
         </div>
       </div>
 
+      <!-- Contraseña -->
       <div class="form-group">
-        <label for="password">Contraseña:</label>
-        <input 
-          type="password" 
-          id="password"
-          formControlName="password"
-          [class.is-invalid]="isFieldInvalid('password')"
-          class="form-control"
-        >
+        <label for="password">Contraseña</label>
+        <div class="input-group">
+          <input
+            [type]="mostrarPassword ? 'text' : 'password'"
+            id="password"
+            formControlName="password"
+            class="form-control"
+            [ngClass]="{'is-invalid': isFieldInvalid('password')}"
+          >
+          <button type="button" class="btn btn-outline-secondary" (click)="togglePasswordVisibility()">
+            <i class="fas" [ngClass]="mostrarPassword ? 'fa-eye-slash' : 'fa-eye'"></i>
+          </button>
+        </div>
         <div class="invalid-feedback" *ngIf="isFieldInvalid('password')">
-          La contraseña es requerida
+          {{ getErrorMessage('password') }}
+        </div>
+        <!-- Requisitos de contraseña -->
+        <div class="password-requirements">
+          <p>La contraseña debe contener:</p>
+          <ul>
+            <li [ngClass]="{'valid': !registroForm.get('password')?.hasError('minlength')}">
+              Mínimo 8 caracteres
+            </li>
+            <li [ngClass]="{'valid': !registroForm.get('password')?.hasError('noUpperCase')}">
+              Al menos una mayúscula
+            </li>
+            <li [ngClass]="{'valid': !registroForm.get('password')?.hasError('noLowerCase')}">
+              Al menos una minúscula
+            </li>
+            <li [ngClass]="{'valid': !registroForm.get('password')?.hasError('noNumbers')}">
+              Al menos un número
+            </li>
+            <li [ngClass]="{'valid': !registroForm.get('password')?.hasError('noSpecialChar')}">
+              Al menos un caracter especial
+            </li>
+          </ul>
         </div>
       </div>
 
-      <button type="submit" class="btn-registrar">
+      <!-- Confirmar Contraseña -->
+      <div class="form-group">
+        <label for="confirmPassword">Confirmar Contraseña</label>
+        <input
+          type="password"
+          id="confirmPassword"
+          formControlName="confirmPassword"
+          class="form-control"
+          [ngClass]="{'is-invalid': isFieldInvalid('confirmPassword')}"
+        >
+        <div class="invalid-feedback" *ngIf="isFieldInvalid('confirmPassword')">
+          {{ getErrorMessage('confirmPassword') }}
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary" [disabled]="registroForm.invalid">
         Registrarse
       </button>
     </form>
